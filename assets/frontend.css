@@ -179,7 +179,7 @@
 .waff-choice-label {
   display: flex !important; 
   align-items: center !important; 
-  gap: 16px !important;
+  gap: 10px !important;
   padding: 7px 11px; border: 1.5px solid #e0e0e0;
   border-radius: 8px; cursor: pointer; font-size: 13px; color: #333;
   transition: border-color .15s, background .15s;
@@ -195,7 +195,7 @@
   cursor: pointer; 
 }
 .waff-choice-text {
-  margin-left: 16px !important;
+  margin-left: 10px !important;
   display: inline-block !important;
   line-height: 1.4 !important;
   user-select: none;
