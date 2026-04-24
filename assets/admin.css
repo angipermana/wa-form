@@ -1,0 +1,440 @@
+/* ── WA Floating Form – Admin Styles ── */
+* { box-sizing: border-box; }
+
+#waff-wrap {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  max-width: 900px;
+  padding: 24px 0 60px;
+  color: #1d2327;
+}
+
+#waff-wrap h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#waff-wrap h1 span.waff-badge {
+  font-size: 11px;
+  background: #25d366;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: .3px;
+}
+.waff-subtitle {
+  color: #646970;
+  font-size: 13px;
+  margin: 0 0 28px;
+}
+
+/* ── Layout ── */
+.waff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 720px) { .waff-grid { grid-template-columns: 1fr; } }
+
+/* ── Card ── */
+.waff-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.waff-card h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #1d2327;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.waff-card h2 svg { flex-shrink: 0; }
+
+/* ── Form Controls ── */
+.waff-field { margin-bottom: 14px; }
+.waff-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #50575e;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.waff-field input[type=text],
+.waff-field input[type=tel],
+.waff-field textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #c3c4c7;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1d2327;
+  background: #fafafa;
+  transition: border-color .15s, box-shadow .15s;
+}
+.waff-field input:focus,
+.waff-field textarea:focus {
+  outline: none;
+  border-color: #25d366;
+  box-shadow: 0 0 0 2px rgba(37,211,102,.15);
+  background: #fff;
+}
+.waff-field textarea { min-height: 90px; resize: vertical; }
+.waff-hint {
+  font-size: 11px;
+  color: #8c8f94;
+  margin-top: 4px;
+}
+
+/* ── Form Builder ── */
+#waff-wrap .waff-builder-full {
+  grid-column: 1 / -1;
+}
+
+.waff-fields-list { list-style: none; margin: 0; padding: 0; }
+.waff-field-item {
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.waff-field-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.waff-field-drag {
+  color: #c3c4c7;
+  cursor: grab;
+  font-size: 16px;
+  line-height: 1;
+}
+.waff-field-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d2327;
+}
+.waff-field-type-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.badge-short_answer { background: #e8f5e9; color: #2e7d32; }
+.badge-choice       { background: #e3f2fd; color: #1565c0; }
+.badge-buttons      { background: #fce4ec; color: #c62828; }
+
+.waff-field-body { padding: 14px; }
+.waff-field-body .waff-field { margin-bottom: 10px; }
+.waff-field-body .waff-field label { font-size: 11px; }
+.waff-field-body input[type=text] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #c3c4c7;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+}
+.waff-field-body input:focus {
+  outline: none;
+  border-color: #25d366;
+  box-shadow: 0 0 0 2px rgba(37,211,102,.15);
+}
+
+.waff-options-list { list-style: none; padding: 0; margin: 0 0 8px; }
+.waff-option-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.waff-option-row input { flex: 1; }
+.waff-btn-icon {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #646970;
+  font-size: 14px;
+  transition: background .1s;
+}
+.waff-btn-icon:hover { background: #f0f0f0; }
+.waff-btn-icon.danger:hover { background: #fce8e8; color: #c62828; border-color: #f5c6c6; }
+
+.waff-field-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+}
+.waff-required-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #50575e;
+  cursor: pointer;
+}
+.waff-required-toggle input { margin: 0; accent-color: #25d366; }
+
+/* Add field buttons */
+.waff-add-field-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.waff-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px dashed;
+  background: transparent;
+  transition: background .15s;
+}
+.waff-add-btn.short { border-color: #2e7d32; color: #2e7d32; }
+.waff-add-btn.short:hover { background: #e8f5e9; }
+.waff-add-btn.choice { border-color: #1565c0; color: #1565c0; }
+.waff-add-btn.choice:hover { background: #e3f2fd; }
+.waff-add-btn.buttons { border-color: #c62828; color: #c62828; }
+.waff-add-btn.buttons:hover { background: #fce4ec; }
+
+/* ── Save Button ── */
+.waff-save-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+}
+#waff-save-btn {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .2s;
+}
+#waff-save-btn:hover { background: #1da851; }
+#waff-save-btn:disabled { background: #a0d9b8; cursor: not-allowed; }
+#waff-save-status {
+  font-size: 13px;
+  font-weight: 500;
+}
+#waff-save-status.success { color: #2e7d32; }
+#waff-save-status.error   { color: #c62828; }
+
+/* ── Preview ── */
+.waff-preview-wrap {
+  margin-top: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.waff-preview-label {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 11px;
+  color: #8c8f94;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.waff-preview-popup {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  width: 280px;
+  padding: 18px;
+  font-family: -apple-system, sans-serif;
+}
+.waff-preview-popup .pp-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 4px;
+}
+.waff-preview-popup .pp-intro {
+  font-size: 12px;
+  color: #777;
+  margin: 0 0 14px;
+}
+.waff-preview-popup .pp-field { margin-bottom: 10px; }
+.waff-preview-popup .pp-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+.waff-preview-popup .pp-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #888;
+  background: #fafafa;
+}
+.waff-preview-popup .pp-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.waff-preview-popup .pp-option {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #555;
+  background: #f5f5f5;
+}
+.waff-preview-popup .pp-btn-wa {
+  width: 100%;
+  margin-top: 12px;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ── Position Grid ── */
+.waff-position-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  width: 120px;
+  height: 90px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+}
+.waff-pos-cell {
+  border-radius: 5px;
+  border: 1.5px dashed #ccc;
+  display: flex;
+  cursor: pointer;
+  transition: all .15s;
+  background: #fff;
+}
+.waff-pos-cell:hover { border-color: #25d366; background: #f0fbf5; }
+.waff-pos-cell.active { border-color: #25d366; background: #25d366; }
+.waff-pos-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 3px;
+}
+.waff-pos-cell.active .waff-pos-dot { background: #fff; }
+
+/* Positioning dots in corners */
+.waff-pos-top-left     { align-items: flex-start; justify-content: flex-start; }
+.waff-pos-top-right    { align-items: flex-start; justify-content: flex-end; }
+.waff-pos-bottom-left  { align-items: flex-end;   justify-content: flex-start; }
+.waff-pos-bottom-right { align-items: flex-end;   justify-content: flex-end; }
+
+/* ── Shape Picker ── */
+.waff-shape-picker {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.waff-shape-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: all .15s;
+  min-width: 72px;
+}
+.waff-shape-opt:hover { border-color: #25d366; background: #f0fbf5; }
+.waff-shape-opt.active { border-color: #25d366; background: #e8f9ef; }
+
+.waff-shape-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #25d366;
+  color: white;
+}
+.shape-bar {
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.shape-round {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+.shape-round-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid #1da851;
+}
+
+.waff-shape-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #50575e;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.waff-shape-opt.active .waff-shape-name { color: #1a7a42; }

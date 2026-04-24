@@ -1,0 +1,217 @@
+/* ── WA Floating Form – Frontend CSS v1.1 ── */
+
+/* ── FAB Base ── */
+#waff-fab {
+  position: fixed;
+  z-index: 99998;
+  border: none;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #25d366;
+  color: #fff;
+  transition: transform .2s, box-shadow .2s;
+}
+#waff-fab:hover { transform: translateY(-2px); }
+
+/* Pulse ring */
+#waff-fab::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid rgba(37,211,102,.4);
+  animation: waff-pulse 2.2s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes waff-pulse {
+  0%   { transform: scale(1); opacity: .8; }
+  70%  { transform: scale(1.12); opacity: 0; }
+  100% { transform: scale(1.12); opacity: 0; }
+}
+
+/* ── Shape: Bar ── */
+#waff-fab.waff-shape-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px 12px 14px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(37,211,102,.45);
+}
+#waff-fab.waff-shape-bar::after { border-radius: 50px; }
+
+/* ── Shape: Round ── */
+#waff-fab.waff-shape-round {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37,211,102,.45);
+}
+#waff-fab.waff-shape-round::after { border-radius: 50%; }
+
+/* ── Shape: Round Avatar ── */
+#waff-fab.waff-shape-round-avatar {
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0;
+}
+#waff-fab.waff-shape-round-avatar::after { display: none; }
+#waff-fab.waff-shape-round-avatar:hover { transform: translateY(-2px); }
+
+.waff-avatar-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 3px solid #25d366;
+  background: #1da851;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(37,211,102,.4);
+  flex-shrink: 0;
+  position: relative;
+  animation: waff-pulse-avatar 2.2s ease-out infinite;
+}
+@keyframes waff-pulse-avatar {
+  0%   { box-shadow: 0 4px 14px rgba(37,211,102,.4), 0 0 0 0 rgba(37,211,102,.3); }
+  70%  { box-shadow: 0 4px 14px rgba(37,211,102,.4), 0 0 0 10px rgba(37,211,102,0); }
+  100% { box-shadow: 0 4px 14px rgba(37,211,102,.4), 0 0 0 0 rgba(37,211,102,0); }
+}
+.waff-avatar-initials {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.waff-avatar-label {
+  background: #25d366;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px 3px 10px;
+  border-radius: 0 10px 10px 0;
+  margin-left: -6px;
+  margin-bottom: 6px;
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+/* ── Overlay ── */
+#waff-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+#waff-overlay.open { opacity: 1; pointer-events: all; }
+
+/* ── Popup Card ── */
+#waff-popup {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18);
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  max-height: 85vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(.97);
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#waff-overlay.open #waff-popup { transform: translateY(0) scale(1); }
+
+.waff-popup-header {
+  background: #25d366;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
+.waff-popup-header-text .waff-popup-title { font-size: 15px; font-weight: 600; margin: 0; }
+.waff-popup-header-text .waff-popup-intro { font-size: 12px; opacity: .85; margin: 2px 0 0; }
+.waff-popup-close {
+  background: rgba(255,255,255,.2); border: none; color: #fff;
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 16px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background .15s;
+}
+.waff-popup-close:hover { background: rgba(255,255,255,.35); }
+
+/* ── Form ── */
+.waff-popup-body { padding: 16px; }
+.waff-form-field { margin-bottom: 13px; }
+.waff-form-field label { display: block; font-size: 11px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+.waff-req { color: #e53935; margin-left: 2px; }
+
+.waff-form-field input[type=text] {
+  width: 100%; box-sizing: border-box;
+  padding: 9px 11px; border: 1.5px solid #e0e0e0;
+  border-radius: 8px; font-size: 13px; color: #1d2327;
+  background: #fafafa; transition: border-color .15s;
+}
+.waff-form-field input[type=text]:focus { outline: none; border-color: #25d366; background: #fff; }
+
+.waff-choices { display: flex; flex-direction: column; gap: 6px; }
+.waff-choice-label {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 11px; border: 1.5px solid #e0e0e0;
+  border-radius: 8px; cursor: pointer; font-size: 13px; color: #333;
+  transition: border-color .15s, background .15s;
+}
+.waff-choice-label:hover { background: #f5fdf8; border-color: #b2dfcc; }
+.waff-choice-label input[type=radio] { accent-color: #25d366; margin: 0; }
+.waff-choice-label.selected { border-color: #25d366; background: #f0fbf5; font-weight: 500; }
+
+.waff-buttons { display: flex; flex-wrap: wrap; gap: 7px; }
+.waff-btn-choice {
+  padding: 7px 13px; border: 1.5px solid #e0e0e0;
+  border-radius: 20px; background: #f5f5f5;
+  font-size: 12px; font-weight: 500; color: #444; cursor: pointer;
+  transition: all .15s; font-family: inherit;
+}
+.waff-btn-choice:hover { border-color: #25d366; color: #25d366; background: #f0fbf5; }
+.waff-btn-choice.selected { background: #25d366; color: #fff; border-color: #25d366; }
+
+/* ── Preview & Submit ── */
+#waff-msg-preview {
+  margin: 0 16px 12px; padding: 10px 12px;
+  background: #f0fbf5; border: 1px solid #b2dfcc;
+  border-radius: 8px; font-size: 12px; color: #2e7d32; display: none;
+}
+#waff-msg-preview strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .4px; color: #888; margin-bottom: 4px; }
+
+#waff-submit {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: calc(100% - 32px); margin: 0 16px 16px;
+  padding: 12px; background: #25d366; color: #fff;
+  border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: background .2s; font-family: inherit;
+}
+#waff-submit:hover { background: #1da851; }
+#waff-submit:disabled { background: #a0d9b8; cursor: not-allowed; }
+
+@media (max-width: 480px) {
+  #waff-fab.waff-shape-bar { padding: 10px 14px; font-size: 13px; }
+  #waff-popup { width: 100%; max-width: 100%; border-radius: 16px 16px 0 0; }
+}
