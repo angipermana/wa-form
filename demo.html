@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview WA Floating Form</title>
+    <!-- Memanggil CSS asli plugin -->
+    <link rel="stylesheet" href="assets/frontend.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            height: 200vh; /* Agar bisa scroll */
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin: 0 auto;
+        }
+        h1 { color: #1da851; font-size: 24px; }
+        p { color: #666; line-height: 1.6; }
+        .badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="badge">Standalone Preview</span>
+        <h1>WA Floating Form Demo</h1>
+        <p>Halaman ini mensimulasikan tampilan plugin di website Anda.</p>
+        <p>Coba klik tombol WhatsApp di pojok kanan bawah untuk mengetes Form Builder (termasuk fitur Checkbox yang baru saja ditambahkan).</p>
+        <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
+        <p style="font-size: 13px; color: #999;">Catatan: Tombol ini menggunakan data simulasi. Di WordPress asli, data ini diambil dari pengaturan database Anda.</p>
+    </div>
+
+    <!-- Simulasi Data WordPress (Localization) -->
+    <script>
+        window.waffData = {
+            "wa_number": "628123456789",
+            "button_label": "Chat via WhatsApp",
+            "intro_text": "Halo! Silakan pilih layanan yang Anda butuhkan.",
+            "btn_position": "bottom-right",
+            "btn_shape": "bar",
+            "fields": [
+                { "id": "f1", "type": "short_answer", "label": "Nama Lengkap", "placeholder": "Contoh: Angi Permana", "required": true },
+                { "id": "f2", "type": "checkbox", "label": "Layanan", "options": ["Jasa Buat Website", "Jasa SEO", "Iklan Google/Meta"], "required": true }
+            ],
+            "message_template": "Halo, nama saya {Nama Lengkap}. Saya tertarik dengan layanan: {Layanan}. Mohon info lebih lanjut."
+        };
+    </script>
+
+    <!-- Memanggil JS asli plugin -->
+    <script src="assets/frontend.js"></script>
+
+</body>
+</html>

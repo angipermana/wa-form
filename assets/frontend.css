@@ -173,13 +173,26 @@
 
 .waff-choices { display: flex; flex-direction: column; gap: 6px; }
 .waff-choice-label {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 12px;
   padding: 7px 11px; border: 1.5px solid #e0e0e0;
   border-radius: 8px; cursor: pointer; font-size: 13px; color: #333;
   transition: border-color .15s, background .15s;
 }
 .waff-choice-label:hover { background: #f5fdf8; border-color: #b2dfcc; }
-.waff-choice-label input[type=radio] { accent-color: #25d366; margin: 0; }
+.waff-choice-label input[type=radio],
+.waff-choice-label input[type=checkbox] { 
+  accent-color: #25d366; 
+  margin: 0; 
+  width: 18px; 
+  height: 18px; 
+  flex-shrink: 0; 
+  cursor: pointer; 
+}
+.waff-choice-text {
+  margin-left: 12px;
+  line-height: 1.4;
+  user-select: none;
+}
 .waff-choice-label.selected { border-color: #25d366; background: #f0fbf5; font-weight: 500; }
 
 .waff-buttons { display: flex; flex-wrap: wrap; gap: 7px; }

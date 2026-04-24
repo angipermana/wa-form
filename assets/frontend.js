@@ -58,7 +58,8 @@
         const type = f.type === 'checkbox' ? 'checkbox' : 'radio';
         const opts = (f.options||[]).map(o => `
           <label class="waff-choice-label">
-            <input type="${type}" name="waff-${esc(f.id)}" value="${esc(o)}" data-field-id="${esc(f.id)}" data-label="${esc(f.label)}" />${esc(o)}
+            <input type="${type}" name="waff-${esc(f.id)}" value="${esc(o)}" data-field-id="${esc(f.id)}" data-label="${esc(f.label)}" />
+            <span class="waff-choice-text">${esc(o)}</span>
           </label>`).join('');
         return `<div class="waff-form-field"><label>${esc(f.label)}${req}</label><div class="waff-choices">${opts}</div></div>`;
       }
@@ -134,11 +135,13 @@
 
     function buildMsg(answers) {
       let msg = cfg.message_template || '';
-      Object.entries(answers).forEach(([k, v]) => {
-        // Escape special regex chars in key and use case-insensitive replacement
-        const safeK = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      (cfg.fields || []).forEach(f => {
+        const label = (f.label || '').trim();
+        if (!label) return;
+        const val = answers[label] || '';
+        const safeK = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp('{' + safeK + '}', 'gi');
-        msg = msg.replace(regex, v);
+        msg = msg.replace(regex, val);
       });
       return msg;
     }
