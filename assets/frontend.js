@@ -75,6 +75,11 @@
   /* ── Init on DOMContentLoaded ── */
   document.addEventListener('DOMContentLoaded', function () {
 
+    // Set primary color variable
+    if (cfg.primary_color) {
+      document.documentElement.style.setProperty('--waff-primary', cfg.primary_color);
+    }
+
     /* Overlay */
     const overlay = document.createElement('div');
     overlay.id = 'waff-overlay';
@@ -187,7 +192,38 @@
     document.getElementById('waff-submit').addEventListener('click', () => {
       const answers = getAnswers();
       if (!isValid(answers)) return;
-      window.open('https://wa.me/' + cfg.wa_number.replace(/\D/g,'') + '?text=' + encodeURIComponent(buildMsg(answers)), '_blank');
+
+      const message = buildMsg(answers);
+
+      // Integrasi Webhook (G-Sheets/Notion via Zapier dsb)
+      if (cfg.webhook_url) {
+        fetch(cfg.webhook_url, {
+          method: 'POST',
+          mode: 'no-cors', // gunakan no-cors agar tidak terblokir browser saat kirim ke G-Sheets/Zapier
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            ...answers
+          })
+        }).catch(err => console.error('Webhook error:', err));
+      }
+
+      // Integrasi Notion Direct (via Project Backend)
+      if (cfg.notion_token && cfg.notion_db_id) {
+        const formData = new FormData();
+        formData.append('action', 'waff_submit_to_notion');
+        formData.append('answers', JSON.stringify(answers));
+        
+        // ajaxurl didefinisikan secara global oleh WordPress di admin, 
+        // tapi di frontend kita bisa pakai path standar jika WP_DEBUG atau ambil dari localized data
+        fetch('/wp-admin/admin-ajax.php', {
+          method: 'POST',
+          body: new URLSearchParams(formData)
+        }).catch(err => console.error('Notion error:', err));
+      }
+
+      window.open('https://wa.me/' + cfg.wa_number.replace(/\D/g,'') + '?text=' + encodeURIComponent(message), '_blank');
     });
   });
 

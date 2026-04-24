@@ -1,4 +1,7 @@
 /* ── WA Floating Form – Frontend CSS v1.1 ── */
+:root {
+  --waff-primary: #25d366;
+}
 
 /* ── FAB Base ── */
 #waff-fab {
@@ -7,7 +10,7 @@
   border: none;
   cursor: pointer;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #25d366;
+  background: var(--waff-primary);
   color: #fff;
   transition: transform .2s, box-shadow .2s;
 }
@@ -19,7 +22,8 @@
   position: absolute;
   inset: -4px;
   border-radius: inherit;
-  border: 2px solid rgba(37,211,102,.4);
+  border: 2px solid var(--waff-primary);
+  opacity: 0.4;
   animation: waff-pulse 2.2s ease-out infinite;
   pointer-events: none;
 }
@@ -70,7 +74,7 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  border: 3px solid #25d366;
+  border: 3px solid var(--waff-primary);
   background: #1da851;
   display: flex;
   align-items: center;
@@ -169,19 +173,21 @@
   border-radius: 8px; font-size: 13px; color: #1d2327;
   background: #fafafa; transition: border-color .15s;
 }
-.waff-form-field input[type=text]:focus { outline: none; border-color: #25d366; background: #fff; }
+.waff-form-field input[type=text]:focus { outline: none; border-color: var(--waff-primary); background: #fff; }
 
 .waff-choices { display: flex; flex-direction: column; gap: 6px; }
 .waff-choice-label {
-  display: flex; align-items: center; gap: 12px;
+  display: flex !important; 
+  align-items: center !important; 
+  gap: 16px !important;
   padding: 7px 11px; border: 1.5px solid #e0e0e0;
   border-radius: 8px; cursor: pointer; font-size: 13px; color: #333;
   transition: border-color .15s, background .15s;
 }
-.waff-choice-label:hover { background: #f5fdf8; border-color: #b2dfcc; }
+.waff-choice-label:hover { background: #f5fdf8; border-color: var(--waff-primary); opacity: 0.8; }
 .waff-choice-label input[type=radio],
 .waff-choice-label input[type=checkbox] { 
-  accent-color: #25d366; 
+  accent-color: var(--waff-primary); 
   margin: 0; 
   width: 18px; 
   height: 18px; 
@@ -189,11 +195,12 @@
   cursor: pointer; 
 }
 .waff-choice-text {
-  margin-left: 12px;
-  line-height: 1.4;
+  margin-left: 16px !important;
+  display: inline-block !important;
+  line-height: 1.4 !important;
   user-select: none;
 }
-.waff-choice-label.selected { border-color: #25d366; background: #f0fbf5; font-weight: 500; }
+.waff-choice-label.selected { border-color: var(--waff-primary); background: #f0fbf5; font-weight: 500; }
 
 .waff-buttons { display: flex; flex-wrap: wrap; gap: 7px; }
 .waff-btn-choice {
@@ -202,8 +209,8 @@
   font-size: 12px; font-weight: 500; color: #444; cursor: pointer;
   transition: all .15s; font-family: inherit;
 }
-.waff-btn-choice:hover { border-color: #25d366; color: #25d366; background: #f0fbf5; }
-.waff-btn-choice.selected { background: #25d366; color: #fff; border-color: #25d366; }
+.waff-btn-choice:hover { border-color: var(--waff-primary); color: var(--waff-primary); background: #f0fbf5; }
+.waff-btn-choice.selected { background: var(--waff-primary); color: #fff; border-color: var(--waff-primary); }
 
 /* ── Preview & Submit ── */
 #waff-msg-preview {
@@ -216,12 +223,12 @@
 #waff-submit {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: calc(100% - 32px); margin: 0 16px 16px;
-  padding: 12px; background: #25d366; color: #fff;
+  padding: 12px; background: var(--waff-primary); color: #fff;
   border: none; border-radius: 10px;
   font-size: 14px; font-weight: 600; cursor: pointer;
   transition: background .2s; font-family: inherit;
 }
-#waff-submit:hover { background: #1da851; }
+#waff-submit:hover { filter: brightness(90%); }
 #waff-submit:disabled { background: #a0d9b8; cursor: not-allowed; }
 
 @media (max-width: 480px) {

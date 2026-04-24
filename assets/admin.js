@@ -47,6 +47,26 @@
           </div>
         </div>
 
+        <!-- ⑤ Integrasi Data -->
+        <div class="waff-card">
+          <h2>${iconZap()} Integrasi Data (Sheets/Notion)</h2>
+          <div class="waff-field">
+            <label>Google Sheets Webhook URL</label>
+            <input type="text" id="waff-webhook" value="${esc(settings.webhook_url||'')}" placeholder="https://script.google.com/macros/s/..." />
+            <div class="waff-hint">Gunakan script doPost (link langsung ke G-Sheets).</div>
+          </div>
+          <div style="border-top:1px solid #eee; margin:15px 0;"></div>
+          <div class="waff-field">
+            <label>Notion API Token (Internal Integration)</label>
+            <input type="text" id="waff-notion-token" value="${esc(settings.notion_token||'')}" placeholder="secret_..." />
+          </div>
+          <div class="waff-field" style="margin-bottom:0;">
+            <label>Notion Database ID</label>
+            <input type="text" id="waff-notion-db" value="${esc(settings.notion_db_id||'')}" placeholder="db id..." />
+            <div class="waff-hint">Data dikirim langsung via API Notion (Tanpa Zapier).</div>
+          </div>
+        </div>
+
         <!-- ② Tampilan Tombol -->
         <div class="waff-card">
           <h2>${iconPalette()} Tampilan Tombol</h2>
@@ -60,6 +80,15 @@
                 </div>`).join('')}
             </div>
             <div class="waff-hint">Posisi aktif: <strong id="waff-pos-label">${pos}</strong></div>
+          </div>
+
+          <div class="waff-field">
+            <label>Warna Utama</label>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <input type="color" id="waff-primary-color" value="${settings.primary_color||'#25d366'}" style="width:45px;height:45px;border:none;padding:0;background:none;cursor:pointer;" />
+              <input type="text" id="waff-primary-hex" value="${settings.primary_color||'#25d366'}" style="width:100px;" oninput="document.getElementById('waff-primary-color').value=this.value; waffSaveTemp();" />
+            </div>
+            <div class="waff-hint">Warna untuk tombol, header popup, dan aksen form.</div>
           </div>
 
           <div class="waff-field">
@@ -133,6 +162,7 @@
   function iconPalette() { return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.69 0 3-.76 3-2 0-.54-.2-1.03-.52-1.42-.28-.35-.44-.79-.44-1.24C14 16.26 14.74 15.5 16 15.5H18c2.76 0 4-1.24 4-3.5C22 6.81 17.52 2 12 2z"/></svg>`; }
   function iconMsg()     { return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`; }
   function iconForm()    { return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`; }
+  function iconZap()     { return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`; }
 
   /* ── Shape picker helpers ── */
   function shapeOpt(val, current, demoHTML) {
@@ -266,11 +296,13 @@
     settings.intro_text       = document.getElementById('waff-intro')?.value || '';
     settings.message_template = document.getElementById('waff-template')?.value || '';
     settings.avatar_name      = document.getElementById('waff-avatar-name')?.value || 'Admin';
-    settings.avatar_url       = document.getElementById('waff-avatar-url')?.value || '';
+    settings.webhook_url      = document.getElementById('waff-webhook')?.value || '';
+    settings.notion_token     = document.getElementById('waff-notion-token')?.value || '';
+    settings.notion_db_id     = document.getElementById('waff-notion-db')?.value || '';
   }
 
   function bindLiveSync() {
-    ['waff-number','waff-btn-label','waff-intro','waff-template','waff-avatar-name','waff-avatar-url'].forEach(id => {
+    ['waff-number','waff-btn-label','waff-intro','waff-template','waff-avatar-name','waff-avatar-url','waff-webhook','waff-notion-token','waff-notion-db'].forEach(id => {
       document.getElementById(id)?.addEventListener('input', () => { syncFromDOM(); updatePreview(); updateVarsHint(); });
     });
   }
@@ -289,10 +321,21 @@
     if (!el) return;
     syncFromDOM();
 
+    const pos    = settings.btn_position || 'bottom-right';
     const shape  = settings.btn_shape || 'bar';
+    const color  = settings.primary_color || '#25d366';
     const label  = settings.button_label || 'Chat via WhatsApp';
     const intro  = settings.intro_text || 'Isi form di bawah ya.';
     const fields = (settings.fields||[]).slice(0,3);
+
+    // Dynamic style for mini preview
+    let style = document.getElementById('waff-preview-style');
+    if (!style) { style = document.createElement('style'); style.id = 'waff-preview-style'; document.head.appendChild(style); }
+    style.innerHTML = `
+      .waff-preview-popup .pp-title, .pp-btn-wa { background: ${color} !important; }
+      .waff-preview-popup { border-top: 4px solid ${color}; }
+      .pp-option { border: 1px solid ${color} !important; color: ${color}; }
+    `;
 
     const fieldsHTML = fields.map(f => {
       if (f.type === 'short_answer') return `<div class="pp-field"><div class="pp-label">${esc(f.label)}</div><div class="pp-input">${esc(f.placeholder||'')}</div></div>`;
@@ -332,10 +375,7 @@
         ${btnHTML}
         <div style="font-size:11px;color:#8c8f94;">↓ Popup yang muncul setelah klik</div>
         <div class="waff-preview-popup">
-          <div class="pp-title">💬 ${esc(label)}</div>
-          <div class="pp-intro">${esc(intro)}</div>
-          ${fieldsHTML}
-          <button class="pp-btn-wa">
+          <button class="pp-btn-wa" style="background:${color};">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Chat Sekarang
           </button>

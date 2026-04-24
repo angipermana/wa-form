@@ -10,7 +10,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'WAFF_VERSION', '1.1.0' );
+define( 'WAFF_VERSION', '1.2.0' );
 define( 'WAFF_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WAFF_URL',  plugin_dir_url( __FILE__ ) );
 
@@ -24,6 +24,7 @@ function waff_activate() {
             'wa_number'     => '',
             'button_label'  => 'Chat via WhatsApp',
             'intro_text'    => 'Halo! Isi form di bawah ya sebelum chat.',
+            'primary_color' => '#25d366',
             'btn_position'  => 'bottom-right',
             'btn_shape'     => 'bar',
             'avatar_url'    => '',
@@ -70,11 +71,16 @@ function waff_save_settings() {
         'wa_number'        => sanitize_text_field( $raw['wa_number'] ?? '' ),
         'button_label'     => sanitize_text_field( $raw['button_label'] ?? 'Chat via WhatsApp' ),
         'intro_text'       => sanitize_text_field( $raw['intro_text'] ?? '' ),
+        'primary_color'    => sanitize_hex_color( $raw['primary_color'] ?? '#25d366' ),
         'message_template' => sanitize_textarea_field( $raw['message_template'] ?? '' ),
         'btn_position'     => in_array( $raw['btn_position'] ?? '', ['bottom-right','bottom-left','top-right','top-left'] ) ? $raw['btn_position'] : 'bottom-right',
         'btn_shape'        => in_array( $raw['btn_shape'] ?? '', ['bar','round','round-avatar'] ) ? $raw['btn_shape'] : 'bar',
         'avatar_url'       => esc_url_raw( $raw['avatar_url'] ?? '' ),
         'avatar_name'      => sanitize_text_field( $raw['avatar_name'] ?? 'Admin' ),
+        'primary_color'    => sanitize_hex_color( $raw['primary_color'] ?? '#25d366' ),
+        'webhook_url'      => esc_url_raw( $raw['webhook_url'] ?? '' ),
+        'notion_token'     => sanitize_text_field( $raw['notion_token'] ?? '' ),
+        'notion_db_id'     => sanitize_text_field( $raw['notion_db_id'] ?? '' ),
         'fields'           => [],
     ];
 
@@ -96,6 +102,54 @@ function waff_save_settings() {
 
     update_option( 'waff_settings', $settings );
     wp_send_json_success( 'Tersimpan!' );
+}
+
+/* ──────────────────────────────────────────────
+   SUBMIT TO NOTION (AJAX)
+────────────────────────────────────────────── */
+add_action( 'wp_ajax_waff_submit_to_notion', 'waff_submit_to_notion' );
+add_action( 'wp_ajax_nopriv_waff_submit_to_notion', 'waff_submit_to_notion' );
+
+function waff_submit_to_notion() {
+    $settings = get_option( 'waff_settings' );
+    $token    = $settings['notion_token'] ?? '';
+    $db_id    = $settings['notion_db_id'] ?? '';
+    
+    if ( ! $token || ! $db_id ) wp_send_json_error( 'Notion not configured' );
+
+    $answers = json_decode( stripslashes( $_POST['answers'] ?? '' ), true );
+    if ( empty($answers) ) wp_send_json_error( 'No data or invalid JSON' );
+
+    // Build Notion Properties
+    $properties = [];
+    foreach ( $answers as $label => $val ) {
+        // Notion requires "Title" for one property, usually we use the first field or "Name"
+        // For simplicity, we treat all as rich_text, but the first one can be Title
+        $type = ( empty($properties) ) ? 'title' : 'rich_text';
+        $properties[$label] = [
+            $type => [ [ 'text' => [ 'content' => (string)$val ] ] ]
+        ];
+    }
+
+    $body = [
+        'parent'     => [ 'database_id' => $db_id ],
+        'properties' => $properties
+    ];
+
+    $response = wp_remote_post( "https://api.notion.com/v1/pages", [
+        'headers' => [
+            'Authorization'  => 'Bearer ' . $token,
+            'Content-Type'   => 'application/json',
+            'Notion-Version' => '2022-06-28'
+        ],
+        'body' => json_encode( $body )
+    ]);
+
+    if ( is_wp_error( $response ) ) {
+        wp_send_json_error( $response->get_error_message() );
+    } else {
+        wp_send_json_success( 'Sent to Notion' );
+    }
 }
 
 /* ──────────────────────────────────────────────
