@@ -302,8 +302,12 @@
   }
 
   function bindLiveSync() {
-    ['waff-number','waff-btn-label','waff-intro','waff-template','waff-avatar-name','waff-avatar-url','waff-webhook','waff-notion-token','waff-notion-db'].forEach(id => {
-      document.getElementById(id)?.addEventListener('input', () => { syncFromDOM(); updatePreview(); updateVarsHint(); });
+    ['waff-number','waff-btn-label','waff-intro','waff-template','waff-avatar-name','waff-avatar-url','waff-webhook','waff-notion-token','waff-notion-db','waff-primary-color','waff-primary-hex'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', (e) => { 
+        if (id === 'waff-primary-color') document.getElementById('waff-primary-hex').value = e.target.value;
+        if (id === 'waff-primary-hex')   document.getElementById('waff-primary-color').value = e.target.value;
+        syncFromDOM(); updatePreview(); updateVarsHint(); 
+      });
     });
   }
 
